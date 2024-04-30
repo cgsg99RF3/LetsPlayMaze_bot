@@ -75,8 +75,6 @@ self.grid # Поле лабиринта, List[width * height * cell()]
 def __init__(self, params : Params) # Инициализация
 
 def draw(self) # Отрисовка лабиринта
-
-def save(self) # Сохранение лабиринта
     
 @abstractmetod
 def generate(self) # Генерация лабиринта (абстрактный метод)
