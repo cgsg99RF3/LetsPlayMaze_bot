@@ -8,7 +8,7 @@ from aiogram.types import Message
 
 class Player:
     def __init__(self, message: Message):
-        self.pos = [0, 0]
+        self.pos = [-1, -1]
         self.id = message.from_user.id
         self.param = Params
         self.maze = Maze
