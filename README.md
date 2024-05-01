@@ -15,7 +15,7 @@
 > /start
 - Начать игру
 > PLAY
-- Задать параметры лабиринта
+- Задать параметры лабиринта 
 > /params width height type
 - Далее появляются кнопки для движения по лабиринту
 - Начать прохождение лабиринта
@@ -24,6 +24,8 @@
 > SHOW PATH
 - Закончить игру
 > EXIT
+- Помощь
+> /help
 #
 ***Запуск***  
 - Запуск
@@ -166,31 +168,39 @@ async def process_params_command(message: Message) # Задать парамет
     
 @staticmethod  
 @dp.message(F.text == 'SOLVE')  
-async def process_play_command(message: Message) # Пройти лабиринт
+async def process_solve_command(message: Message) # Пройти лабиринт
 
 @staticmethod
 @dp.message(F.text == '⬇️')
-async def process_play_command(message: Message) # Движение вниз
+async def process_down_command(message: Message) # Движение вниз
 
 @staticmethod
 @dp.message(F.text == '⬆️')
-async def process_play_command(message: Message) # Движение вверх
+async def process_up_command(message: Message) # Движение вверх
 
 @staticmethod
 @dp.message(F.text == '➡️')
-async def process_play_command(message: Message) # Движение вправо
+async def process_right_command(message: Message) # Движение вправо
         
 @staticmethod
 @dp.message(F.text == '⬅️')
-async def process_play_command(message: Message) # Движение влево
+async def process_left_command(message: Message) # Движение влево
     
 @staticmethod
 @dp.message(F.text == 'SHOW PATH')
-async def process_play_command(message: Message) # Показать путь
+async def process_path_command(message: Message) # Показать путь
     
 @staticmethod
 @dp.message(F.text == 'EXIT')
-async def process_play_command(message: Message) # Остановить игру
+async def process_exit_command(message: Message) # Остановить игру
+
+@staticmethod
+@dp.message(F.text == '/help')
+async def process_help_command(message: Message) # Помощь
+
+@staticmethod
+@dp.message()
+async def process_unknown_command(message: Message) # Обработка неверных комманд
 
 def run(self) # Запустить бота
 ```
