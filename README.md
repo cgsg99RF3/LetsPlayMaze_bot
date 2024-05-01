@@ -10,12 +10,36 @@
 - Решение лабиринтов и отображение пути
 - Возможность прохождения лабиринта
 #
+***Использование:***  
+- Начать взаимодействие с ботом
+> /start
+- Начать игру
+> PLAY
+- Задать параметры лабиринта
+> /params width height type
+- Далее появляются кнопки для движения по лабиринту
+- Начать прохождение лабиринта
+> SOLVE
+- Показать путь прохождения
+> SHOW PATH
+- Закончить игру
+> EXIT
+#
+***Запуск***  
+- Запуск
+```bash
+git clone git@github.com:cgsg99RF3/LetsPlayMaze_bot.git &&
+cd LetsPlayMaze_bot &&   
+git checkout development &&  
+pip install -r requirements.txt &&  
+python3 run_bot.py 
+```
+В телеграм открыть @LetsPlayMaze_bot
+#
 ***Архитектура:***
 
 **1) Class Params**
 ```python
-self.glob_sz # min из высоты и ширины окна
-
 self.width  # Высота лабиринта
 
 self.height  # Ширина лабиринта
@@ -39,10 +63,6 @@ self.is_checked # Флаг, был ли алгоритм в клетке
 
 self.walls # List([bool]) - лист, показывает есть стена или нет
 
-self.size # Размер клетки
-
-self.width # Ширина стен
-
 self.in_path # Принадлежит ли клетка пути прохождения
 ```
 ```python
@@ -63,7 +83,6 @@ def is_wall(first : Cell, second : Cell) # Проверка, есть ли ст�
 @staticmetod
 def set_path(first, second, is_wall) # Создание/Удаление стены между клетками
 
-def draw(self, display): # Рисовка клетки
 ```
 **3) Class Maze**
 ```python
@@ -73,8 +92,6 @@ self.grid # Поле лабиринта, List[width * height * cell()]
 ```
 ```python
 def __init__(self, params : Params) # Инициализация
-
-def draw(self) # Отрисовка лабиринта
     
 @abstractmetod
 def generate(self) # Генерация лабиринта (абстрактный метод)
@@ -108,36 +125,77 @@ self.maze # Лабиринт
 
 self.pos # Позиция игрока
 
+self.param # Параметры лабиринта
+
 def __init__(self) # Инициализация
 
-def move(direction, grid) # Движение игрока
+def move(self, delta) # Движение игрока
+
+def create_maze(self, width, height, maze_type) # Генерация лабринта (интерфейс)
+
+def check(self) # Проверка, пройден ли лабиринт
+
+def draw(self) # Отрисовка графики для пользователя
 ```
 #
 **8) Class BotInterface**
 ```python
-self.bot_token # Токен
+self.bot # Бот
 
-keyboard # клавиатура
+dp # Диспечер
 
-users[] # Все игроки
+key_words # Сообщения для соответсвующих клеток
+
+move_keyboard # Кнопки для движения по лабиринту
+
+users_id = [] # Идентификаторы игроков
+users = dict() # Все игроки
 
 def __init__(self, token:str) # Инициализация по токену
 
-@router.message(CommandStart())
+@staticmethod
+@dp.message(CommandStart())
 async def process_start_command(message: Message) # Начать взаимодействие с ботом
 
-@router.message(Command(commands='help'))
-async def process_help_command(message: Message) # Помощь
+@staticmethod
+@dp.message(F.text == 'PLAY')
+async def process_play_command(message: Message) # Начать игру  
 
-@router.message(Command(commands='lets_play'))
-async def process_play_command(message: Message) # Начать игру
+@dp.message(F.text.startswith('/params'))  
+async def process_params_command(message: Message) # Задать параметры лабиринта  
+    
+@staticmethod  
+@dp.message(F.text == 'SOLVE')  
+async def process_play_command(message: Message) # Пройти лабиринт
 
-@router.message(Command(commands='stop'))
-async def process_stop_command(message: Message) # Остановить игру
+@staticmethod
+@dp.message(F.text == '⬇️')
+async def process_play_command(message: Message) # Движение вниз
 
-@router.message(Command(commands='path'))
-async def process_path_command(message: Message) # Показать путь
+@staticmethod
+@dp.message(F.text == '⬆️')
+async def process_play_command(message: Message) # Движение вверх
 
-@router.message(Command(commands='new_maze'))
-async def process_new_maze_command(message: Message) # Сгенерировать новый лабиринт
+@staticmethod
+@dp.message(F.text == '➡️')
+async def process_play_command(message: Message) # Движение вправо
+        
+@staticmethod
+@dp.message(F.text == '⬅️')
+async def process_play_command(message: Message) # Движение влево
+    
+@staticmethod
+@dp.message(F.text == 'SHOW PATH')
+async def process_play_command(message: Message) # Показать путь
+    
+@staticmethod
+@dp.message(F.text == 'EXIT')
+async def process_play_command(message: Message) # Остановить игру
+
+def run(self) # Запустить бота
 ```
+#
+***Использованный библиотеки:***  
+- aiogram
+- abc
+
